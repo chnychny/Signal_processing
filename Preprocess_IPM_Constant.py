@@ -165,23 +165,23 @@ for cond_name in folder_list: # 상태
         idx_samp_start = list(range(0,log_df_len-N,N))#no overlap np.arange(2000, 4000 - 1, 1)
         Nlen = len(idx_samp_start)
         for n_i in range(Nlen-1):
-            if len(np.setdiff1d(n_i,[int(Nlen//3),int(Nlen//2),int(Nlen//3*2)]))==0:# 다계산 안하고 몇개만
+            # if len(np.setdiff1d(n_i,[int(Nlen//3),int(Nlen//2),int(Nlen//3*2)]))==0:# 다계산 안하고 몇개만
                 # 1. scaling
-                print(str(n_i)+'/'+str(Nlen)+' datafile: '+figname1)
-                idx_samp = list(range(idx_samp_start[n_i],idx_samp_start[n_i+1],1))
-                # 어느구간을 plot하는건지 원신호 plot
-                t_fig_name = figname1 + 'ni' + str(n_i)+ '.png'
-                temp_Tick_time = np.array([idx_samp[0], idx_samp[-1]])
-                _, _ = func_subplots_by_time_varying(log_df.columns, log_df, temp_Tick_time, Figsavedir, t_fig_name,
-                                                     savemode=True)
+            print(str(n_i)+'/'+str(Nlen)+' datafile: '+figname1)
+            idx_samp = list(range(idx_samp_start[n_i],idx_samp_start[n_i+1],1))
+            # 어느구간을 plot하는건지 원신호 plot
+            t_fig_name = figname1 + 'ni' + str(n_i)+ '.png'
+            temp_Tick_time = np.array([idx_samp[0], idx_samp[-1]])
+            _, _ = func_subplots_by_time_varying(log_df.columns, log_df, temp_Tick_time, Figsavedir, t_fig_name,
+                                                 savemode=True)
 
-                df_n_amp_scale,idx_samp = AmpScaling(log_df, idx_samp)
+            df_n_amp_scale,idx_samp = AmpScaling(log_df, idx_samp)
 
-                # 2. phase resamp
-                for pp in range(3):
-                    resampled_signal=ResampleOT(df_n_amp_scale.iloc[:,pp+1].to_numpy(),muT,Show=False) #
+            # 2. phase resamp
+            for pp in range(3):
+                resampled_signal=ResampleOT(df_n_amp_scale.iloc[:,pp+1].to_numpy(),muT,Show=False) #
 
-                    plane_fig_name ='_analytic_plane' +str(pp)+' '+figname1+'ni'+str(n_i)+'.png'
-                    plot_analytic_signal(hilbert(log_df.iloc[idx_samp,pp+1]),'fig_original_n'+plane_fig_name,Figsavedir, savemode = True,axisshow=True, Show=False )
-                    plot_analytic_signal(hilbert(resampled_signal), 'fig_scale+resamp'+plane_fig_name,Figsavedir, savemode = True,axisshow=True, Show=False)
-                    Img_analytic_plane(hilbert(resampled_signal), figshape,'Img' + plane_fig_name, Figsavedir2,savemode=True, axisshow=False, Show=False)
+                plane_fig_name ='_analytic_plane' +str(pp)+' '+figname1+'ni'+str(n_i)+'.png'
+                # plot_analytic_signal(hilbert(log_df.iloc[idx_samp,pp+1]),'fig_original_n'+plane_fig_name,Figsavedir, savemode = True,axisshow=True, Show=False )
+                # plot_analytic_signal(hilbert(resampled_signal), 'fig_scale+resamp'+plane_fig_name,Figsavedir, savemode = True,axisshow=True, Show=False)
+                Img_analytic_plane(hilbert(resampled_signal), figshape,'Img' + plane_fig_name, Figsavedir2,savemode=True, axisshow=False, Show=False)
